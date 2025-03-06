@@ -1,0 +1,7 @@
+{
+  "name": "$PasapalabraAngular",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
