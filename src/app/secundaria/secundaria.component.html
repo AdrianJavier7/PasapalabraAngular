@@ -4,10 +4,11 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <div class="rosco-container" id="rosco"></div>
-  <div class="question-container" id="question">Presiona una letra para ver la pregunta</div>
-  <ion-input id="answer" placeholder="Escribe tu respuesta"></ion-input>
-  <ion-button expand="full" onclick="checkAnswer()">Responder</ion-button>
+  <div class="rosco-container" #rosco>
+    <div class="question-container" #question>Presiona una letra para ver la pregunta</div>
+    <ion-input #answer placeholder="Escribe tu respuesta"></ion-input>
+    <ion-button expand="full" onclick="checkAnswer()">Responder</ion-button>
+  </div>
 </ion-content>
 
 <!-- <script>
