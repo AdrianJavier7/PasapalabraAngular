@@ -8,7 +8,7 @@
   <div class="rosco-container" #rosco>
     <div #empieza style="color: black"></div>
     <div class="question-container" #question>Presiona una letra para ver la pregunta</div>
-    <div class="answer-buttons">
+    <div class="answer-buttons" *ngIf="mostrarBotones">
       <ion-button class="boton1" expand="full" (click)="checkAnswer(currentOptions[0])">{{ currentOptions[0] }}</ion-button>
       <ion-button class="boton2" expand="full" (click)="checkAnswer(currentOptions[1])">{{ currentOptions[1] }}</ion-button>
     </div>

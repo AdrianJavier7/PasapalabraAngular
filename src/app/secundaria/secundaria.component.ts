@@ -16,7 +16,7 @@ export class SecundariaComponent implements OnInit {
   @ViewChild('question', { static: true }) questionContainer!: ElementRef;
   @ViewChild('empieza', { static: true }) empieza!: ElementRef;
 
-  letras: string[] = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split("");
+  letras: string[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
   preguntas: { [key: string]: string } = {};
   respuestas: { [key: string]: string } = {};
   letraActual: string = "";

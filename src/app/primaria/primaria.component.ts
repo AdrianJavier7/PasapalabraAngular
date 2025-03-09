@@ -1,27 +1,30 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { ToastController } from '@ionic/angular';
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-primaria',
   templateUrl: './primaria.component.html',
   styleUrls: ['./primaria.component.scss'],
   standalone: true,
-  imports: [IonicModule]
+  imports: [IonicModule, NgIf]
 })
 export class PrimariaComponent implements OnInit {
   @ViewChild('rosco', { static: true }) roscoContainer!: ElementRef;
   @ViewChild('question', { static: true }) questionContainer!: ElementRef;
   @ViewChild('empieza', { static: true }) empieza!: ElementRef;
 
-  letras: string[] = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split("");
+  letras: string[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
   preguntas: { [key: string]: string } = {};
   respuestas: { [key: string]: string } = {};
+  respuestasIncorrectas: { [key: string]: string } = {};
   letraActual: string = "";
   letrasRespondidas: Set<string> = new Set();
   correctAnswers: number = 0;
   isModalOpen: boolean = false;
   currentOptions: string[] = [];  // Definir currentOptions aquí
+  mostrarBotones: boolean = false;
 
   constructor(private toastController: ToastController) {
     this.preguntas = {
@@ -81,6 +84,35 @@ export class PrimariaComponent implements OnInit {
       "Y": "Oyarzábal",
       "Z": "Zaragoza"
     };
+
+    this.respuestasIncorrectas = {
+      "A": "Apostolado",
+      "B": "Bilbao",
+      "C": "Comunidad",
+      "D": "Descubrimiento",
+      "E": "Escritura",
+      "F": "Fidelidad",
+      "G": "Generosidad",
+      "H": "Héroe",
+      "I": "Iglesia",
+      "J": "Jerónimo",
+      "K": "Kashiwara",
+      "L": "Lima",
+      "M": "Mendoza",
+      "N": "Navidad",
+      "O": "Ocasión",
+      "P": "Palencia",
+      "Q": "Quintana",
+      "R": "Reina",
+      "S": "Sombra",
+      "T": "Tesoro",
+      "U": "Universo",
+      "V": "Vinculación",
+      "W": "Westminster",
+      "X": "Xenia",
+      "Y": "Yañez",
+      "Z": "Zarzuela"
+    }
   }
 
   ngOnInit() {
@@ -88,11 +120,11 @@ export class PrimariaComponent implements OnInit {
   }
 
   mostrarModalPuntuacion() {
-    this.isModalOpen = true;  // Abrir el modal
+    this.isModalOpen = true;
   }
 
   closeModal() {
-    this.isModalOpen = false;  // Cerrar el modal
+    this.isModalOpen = false;
   }
 
   generarRosco() {
@@ -109,7 +141,6 @@ export class PrimariaComponent implements OnInit {
       const elementoLetra = document.createElement("div");
       elementoLetra.textContent = letra;
 
-      // Aplicar los estilos directamente
       Object.assign(elementoLetra.style, {
         position: "absolute",
         width: "42px",
@@ -128,19 +159,16 @@ export class PrimariaComponent implements OnInit {
         transform: "translate(-50%, -50%)",
       });
 
-      // Deshabilitar clic en letras ya respondidas
       if (this.letrasRespondidas.has(letra)) {
         elementoLetra.style.pointerEvents = 'none';
       }
 
-      // Agregar evento de clic
       elementoLetra.onclick = () => {
         if (!this.letrasRespondidas.has(letra)) {
           this.mostrarPregunta(letra);
         }
       };
 
-      // Agregar la letra al rosco
       this.roscoContainer.nativeElement.appendChild(elementoLetra);
     });
   }
@@ -149,25 +177,12 @@ export class PrimariaComponent implements OnInit {
     this.letraActual = letra;
     this.questionContainer.nativeElement.textContent = this.preguntas[letra] || "Pregunta no disponible.";
 
-    // Aquí se configuran las opciones de respuesta dinámicas
-    const opcionesIncorrectas = this.obtenerRespuestasIncorrectas(letra);
-    this.currentOptions = [this.respuestas[letra], ...opcionesIncorrectas];
-    this.currentOptions = this.shuffleArray(this.currentOptions); // Mezclar opciones
-  }
+    // Generar opciones de respuesta
+    const correctAnswer = this.respuestas[letra];
+    const incorrectAnswer = this.respuestasIncorrectas[letra];
+    this.currentOptions = this.shuffleArray([correctAnswer, incorrectAnswer]);  // Mezclamos las opciones
 
-  obtenerRespuestasIncorrectas(letra: string): string[] {
-    const respuestasIncorrectas = Object.values(this.respuestas).filter((respuesta) => respuesta !== this.respuestas[letra]);
-    const respuestasAleatorias = [];
-
-    // Seleccionamos 3 respuestas incorrectas aleatorias
-    while (respuestasAleatorias.length < 3) {
-      const randomRespuesta = respuestasIncorrectas[Math.floor(Math.random() * respuestasIncorrectas.length)];
-      if (!respuestasAleatorias.includes(randomRespuesta)) {
-        respuestasAleatorias.push(randomRespuesta);
-      }
-    }
-
-    return respuestasAleatorias;
+    this.mostrarBotones = true;
   }
 
   shuffleArray(array: string[]): string[] {
@@ -178,7 +193,7 @@ export class PrimariaComponent implements OnInit {
     const correctAnswer = this.respuestas[this.letraActual];
 
     if (option.toLowerCase() === correctAnswer.toLowerCase()) {
-      this.correctAnswers++;  // Incrementar el contador de respuestas correctas
+      this.correctAnswers++;
       await this.mostrarToast("¡Correcto!", 'success');
       this.cambiarColorLetra(true);
     } else {
@@ -186,11 +201,9 @@ export class PrimariaComponent implements OnInit {
       this.cambiarColorLetra(false);
     }
 
-    // Marcar la letra como respondida
     this.letrasRespondidas.add(this.letraActual);
     this.actualizarRosco();
 
-    // Verificar si el juego ha terminado
     if (this.letrasRespondidas.size === this.letras.length) {
       this.mostrarModalPuntuacion();
     }
@@ -208,9 +221,9 @@ export class PrimariaComponent implements OnInit {
   async mostrarToast(mensaje: string, color: string) {
     const toast = await this.toastController.create({
       message: mensaje,
-      duration: 2000,  // Duración en milisegundos
-      color: color,    // El color del toast (puede ser 'success', 'danger', etc.)
-      position: 'bottom',  // Ubicación en la pantalla
+      duration: 2000,
+      color: color,
+      position: 'bottom',
     });
     toast.present();
   }
@@ -219,7 +232,7 @@ export class PrimariaComponent implements OnInit {
     const elementosLetras = this.roscoContainer.nativeElement.children;
     Array.from(elementosLetras).forEach((elemento: any) => {
       if (this.letrasRespondidas.has(elemento.textContent)) {
-        elemento.style.pointerEvents = 'none'; // Deshabilitar la letra si ya se respondió
+        elemento.style.pointerEvents = 'none';
       }
     });
   }
