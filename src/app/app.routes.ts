@@ -11,6 +11,10 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
+    path: 'primaria',
+    loadComponent: () => import('./primaria/primaria.component').then((m) => m.PrimariaComponent),
+  },
+  {
     path: 'secundaria',
     loadComponent: () => import('./secundaria/secundaria.component').then((m) => m.SecundariaComponent),
   }
