@@ -1,70 +1,16 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rosco Pasapalabra - Ionic</title>
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core@latest/dist/ionic/ionic.esm.js"></script>
-  <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core@latest/dist/ionic/ionic.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core@latest/css/ionic.bundle.css" />
-  <style>
-    ion-content {
-      --background: #f4f4f4;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      text-align: center;
-    }
-    .rosco-container {
-      position: relative;
-      width: 350px;
-      height: 350px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .letter {
-      position: absolute;
-      width: 42px;
-      height: 42px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: #007aff;
-      color: white;
-      font-size: 1.2rem;
-      font-weight: bold;
-      border-radius: 50%;
-      cursor: pointer;
-      transform: translate(-50%, -50%);
-    }
-    .question-container {
-      margin-top: 20px;
-      font-size: 1.2rem;
-    }
-    ion-input {
-      margin: 10px;
-    }
-  </style>
-</head>
-<body>
-<ion-app>
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Rosco Pasapalabra</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content>
-    <div class="rosco-container" id="rosco"></div>
-    <div class="question-container" id="question">Presiona una letra para ver la pregunta</div>
-    <ion-input id="answer" placeholder="Escribe tu respuesta"></ion-input>
-    <ion-button expand="full" onclick="checkAnswer()">Responder</ion-button>
-  </ion-content>
-</ion-app>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Rosco Pasapalabra</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="rosco-container" id="rosco"></div>
+  <div class="question-container" id="question">Presiona una letra para ver la pregunta</div>
+  <ion-input id="answer" placeholder="Escribe tu respuesta"></ion-input>
+  <ion-button expand="full" onclick="checkAnswer()">Responder</ion-button>
+</ion-content>
 
-<script>
+<!-- <script>
   const letters = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split("");
   const questions = letters.reduce((acc, letter) => {
     acc[letter] = `Con la ${letter}: Pregunta ejemplo.`;
@@ -117,6 +63,4 @@
   }
 
   generateRosco();
-</script>
-</body>
-</html>
+</script>-->

@@ -1,27 +1,67 @@
-#container {
-  text-align: center;
-
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+/* Estilos para el contenedor */
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  padding: 20px;
+  box-sizing: border-box;
+  background: linear-gradient(45deg, #006bff, #7a92ec);
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
+/* Estilos para el header */
+.header {
+  background: #2757c0;
 }
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
-  margin: 0;
+/* Estilos para el título del header */
+ion-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: white; /* Color del texto */
+  text-align: center; /* Poner el texto en mayúsculas */
+  letter-spacing: 1px; /* Espaciado entre letras */
+  flex: 0;
 }
 
-#container a {
-  text-decoration: none;
+/* Estilo del ion-toolbar */
+ion-toolbar {
+  --background: transparent; /* Eliminar fondo del toolbar */
+  padding: 0;
+  display: flex;
+  justify-content: center; /* Centrar el título */
+  align-items: center; /* Alineación vertical */
+}
+
+/* Desactivar estilos predeterminados del ion-button */
+ion-button {
+  --background: none; /* Elimina el fondo predeterminado */
+  --border-radius: 50px; /* Bordes redondeados */
+  --box-shadow: none; /* Elimina la sombra predeterminada */
+  --color: white; /* Color del texto */
+  --padding-start: 20px; /* Alineación y espacio al inicio */
+  --padding-end: 20px; /* Alineación y espacio al final */
+  --font-weight: bold; /* Establece un peso de fuente en negrita */
+  --font-size: 18px; /* Tamaño de fuente */
+  text-transform: uppercase; /* Pone el texto en mayúsculas */
+  border: 2px solid #004dcc; /* Bordes del botón */
+  background-color: transparent; /* Fondo transparente */
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  width: 250px;
+  padding: 15px;
+  margin: 15px 0;
+}
+
+/* Efecto visual para el hover */
+ion-button:hover {
+  transform: translateY(-5px);
+  background-color: #2757c0;
+  --background-hover: transparent;
+}
+
+/* Efecto activo al hacer clic */
+ion-button:active {
+  transform: translateY(2px);
 }
