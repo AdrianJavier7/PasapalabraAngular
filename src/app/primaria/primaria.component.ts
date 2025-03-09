@@ -212,9 +212,14 @@ export class PrimariaComponent implements OnInit {
 
     // Verificar si el juego ha terminado
     if (this.letrasRespondidas.size === this.letras.length) {
+      // Mostrar el modal de puntuación
       this.mostrarModalPuntuacion();
     }
+
+    // Ocultar los botones después de una respuesta
+    this.mostrarBotones = false;
   }
+
 
   cambiarColorLetra(esCorrecto: boolean) {
     const elementosLetras = this.roscoContainer.nativeElement.children;
