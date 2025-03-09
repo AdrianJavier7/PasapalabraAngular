@@ -41,15 +41,36 @@ export class SecundariaComponent implements OnInit {
       const y = centerY + radius * Math.sin(angle);
 
       const letterElement = document.createElement("div");
-      letterElement.classList.add("letter");
       letterElement.textContent = letter;
-      letterElement.style.left = `${x}px`;
-      letterElement.style.top = `${y}px`;
+
+      // 🔹 Aplica los estilos directamente
+      Object.assign(letterElement.style, {
+        position: "absolute",
+        width: "42px",
+        height: "42px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#007aff",
+        color: "white",
+        fontSize: "1.2rem",
+        fontWeight: "bold",
+        borderRadius: "50%",
+        cursor: "pointer",
+        left: `${x}px`,
+        top: `${y}px`,
+        transform: "translate(-50%, -50%)",
+      });
+
+      // Agrega evento de clic
       letterElement.onclick = () => this.showQuestion(letter);
 
+      // Agrega la letra al rosco
       this.roscoContainer.nativeElement.appendChild(letterElement);
     });
   }
+
+
 
   showQuestion(letter: string) {
     this.currentLetter = letter;
