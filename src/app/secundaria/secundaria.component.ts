@@ -30,7 +30,7 @@ export class SecundariaComponent implements OnInit {
   }
 
   generateRosco() {
-    const radius = 140;
+    const radius = 220;
     const centerX = 175;
     const centerY = 175;
     const angleStep = (2 * Math.PI) / this.letters.length;

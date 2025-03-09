@@ -7,14 +7,20 @@ ion-content {
   height: 100vh;
   text-align: center;
 }
+
 .rosco-container {
   position: relative;
   width: 350px;
-  height: 350px;
+  height: 390px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 100px;
 }
+
 .letter {
   position: absolute !important;
   width: 42px !important;
@@ -35,6 +41,7 @@ ion-content {
   margin-top: 20px;
   font-size: 1.2rem;
 }
+
 ion-input {
   margin: 10px;
 }
