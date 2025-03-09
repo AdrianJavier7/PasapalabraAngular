@@ -1,14 +1,14 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Rosco Pasapalabra</ion-title>
+    <ion-title>
+      <a href="/home" style="color: inherit; text-decoration: none;">Rosco Pasapalabra</a>
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <div class="rosco-container" #rosco>
-    <div #empieza style="color: black">
-
-    </div>
+    <div #empieza style="color: black"></div>
     <div class="question-container" #question>Presiona una letra para ver la pregunta</div>
     <form [formGroup]="formularioRespuesta">
       <ion-input formControlName="respuesta" placeholder="Escribe tu respuesta" style="color: black"></ion-input>

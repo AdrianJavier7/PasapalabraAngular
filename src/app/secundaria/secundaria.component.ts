@@ -165,6 +165,7 @@ export class SecundariaComponent implements OnInit {
     const empiezaConLetra = textoRespuesta.startsWith(letra.toLowerCase());
 
     const empiezaContainer = this.empieza.nativeElement;
+    empiezaContainer.style.marginBottom = '20px';
 
     if (contieneLetra) {
       if (empiezaConLetra) {
@@ -195,6 +196,10 @@ export class SecundariaComponent implements OnInit {
     // Marcar la letra como respondida y deshabilitarla para futuras respuestas
     this.letrasRespondidas.add(this.letraActual);
     this.actualizarRosco();
+
+    // Mostrar el mensaje "Presiona una letra para ver la pregunta"
+    this.empieza.nativeElement.textContent = "";
+    this.questionContainer.nativeElement.textContent = "Presiona una letra para ver la pregunta";
 
     // Limpiar el formulario
     this.formularioRespuesta.reset();

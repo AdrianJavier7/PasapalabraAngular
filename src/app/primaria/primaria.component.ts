@@ -210,6 +210,9 @@ export class PrimariaComponent implements OnInit {
     this.letrasRespondidas.add(this.letraActual);
     this.actualizarRosco();
 
+    // Mostrar el mensaje "Presiona una letra para ver la pregunta"
+    this.questionContainer.nativeElement.textContent = "Presiona una letra para ver la pregunta";
+
     // Verificar si el juego ha terminado
     if (this.letrasRespondidas.size === this.letras.length) {
       // Mostrar el modal de puntuación
