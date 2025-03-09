@@ -69,6 +69,21 @@ export class PrimariaComponent implements OnInit {
   showQuestion(letter: string) {
     this.currentLetter = letter;
     this.questionContainer.nativeElement.textContent = this.questions[letter] || "Pregunta no disponible.";
+
+    const answerAButton = document.querySelector('.boton1') as HTMLElement;
+    const answerBButton = document.querySelector('.boton2') as HTMLElement;
+
+    if (answerAButton && answerBButton) {
+      if (letter) {
+        answerAButton.style.display = 'block';
+        answerBButton.style.display = 'block';
+        answerAButton.textContent = this.answers[letter]?.A || "Respuesta A";
+        answerBButton.textContent = this.answers[letter]?.B || "Respuesta B";
+      } else {
+        answerAButton.style.display = 'none';
+        answerBButton.style.display = 'none';
+      }
+    }
   }
 
   checkAnswer(selectedAnswer: string) {
