@@ -17,6 +17,7 @@ export class PrimariaComponent implements OnInit {
   letras: string[] = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split("");
   preguntas: { [key: string]: string } = {};
   respuestas: { [key: string]: string } = {};
+  respuestasIncorrectas: { [key: string]: string } = {};
   letraActual: string = "";
   letrasRespondidas: Set<string> = new Set();
   correctAnswers: number = 0;
@@ -81,6 +82,36 @@ export class PrimariaComponent implements OnInit {
       "Y": "Oyarzábal",
       "Z": "Zaragoza"
     };
+
+
+    this.respuestasIncorrectas = {
+      "A": "Anacoreta",
+      "B": "Beaterio",
+      "C": "Clero",
+      "D": "Dogma",
+      "E": "Encíclica",
+      "F": "Fraternidad",
+      "G": "Gloria",
+      "H": "Humildad",
+      "I": "Isidoro",
+      "J": "Jeremías",
+      "K": "Kilimanjaro",
+      "L": "Letrán",
+      "M": "Montecasino",
+      "N": "Nogales",
+      "O": "Ofertorio",
+      "P": "París",
+      "Q": "Quevedo",
+      "R": "Rávena",
+      "S": "Sínodo",
+      "T": "Tabernáculo",
+      "U": "Utopía",
+      "V": "Virtudes",
+      "W": "Washington",
+      "X": "Examen",
+      "Y": "Yuste",
+      "Z": "Zamora"
+    }
   }
 
   ngOnInit() {
