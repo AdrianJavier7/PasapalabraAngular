@@ -85,33 +85,34 @@ export class PrimariaComponent implements OnInit {
       "Z": "Zaragoza"
     };
 
+
     this.respuestasIncorrectas = {
-      "A": "Apostolado",
-      "B": "Bilbao",
-      "C": "Comunidad",
-      "D": "Descubrimiento",
-      "E": "Escritura",
-      "F": "Fidelidad",
-      "G": "Generosidad",
-      "H": "Héroe",
-      "I": "Iglesia",
-      "J": "Jerónimo",
-      "K": "Kashiwara",
-      "L": "Lima",
-      "M": "Mendoza",
-      "N": "Navidad",
-      "O": "Ocasión",
-      "P": "Palencia",
-      "Q": "Quintana",
-      "R": "Reina",
-      "S": "Sombra",
-      "T": "Tesoro",
-      "U": "Universo",
-      "V": "Vinculación",
-      "W": "Westminster",
-      "X": "Xenia",
-      "Y": "Yañez",
-      "Z": "Zarzuela"
+      "A": "Anacoreta",
+      "B": "Beaterio",
+      "C": "Clero",
+      "D": "Dogma",
+      "E": "Encíclica",
+      "F": "Fraternidad",
+      "G": "Gloria",
+      "H": "Humildad",
+      "I": "Isidoro",
+      "J": "Jeremías",
+      "K": "Kilimanjaro",
+      "L": "Letrán",
+      "M": "Montecasino",
+      "N": "Nogales",
+      "O": "Ofertorio",
+      "P": "París",
+      "Q": "Quevedo",
+      "R": "Rávena",
+      "S": "Sínodo",
+      "T": "Tabernáculo",
+      "U": "Utopía",
+      "V": "Virtudes",
+      "W": "Washington",
+      "X": "Examen",
+      "Y": "Yuste",
+      "Z": "Zamora"
     }
   }
 
@@ -141,6 +142,7 @@ export class PrimariaComponent implements OnInit {
       const elementoLetra = document.createElement("div");
       elementoLetra.textContent = letra;
 
+      // Aplicar los estilos directamente
       Object.assign(elementoLetra.style, {
         position: "absolute",
         width: "42px",
@@ -159,16 +161,19 @@ export class PrimariaComponent implements OnInit {
         transform: "translate(-50%, -50%)",
       });
 
+      // Deshabilitar clic en letras ya respondidas
       if (this.letrasRespondidas.has(letra)) {
         elementoLetra.style.pointerEvents = 'none';
       }
 
+      // Agregar evento de clic
       elementoLetra.onclick = () => {
         if (!this.letrasRespondidas.has(letra)) {
           this.mostrarPregunta(letra);
         }
       };
 
+      // Agregar la letra al rosco
       this.roscoContainer.nativeElement.appendChild(elementoLetra);
     });
   }
@@ -201,9 +206,11 @@ export class PrimariaComponent implements OnInit {
       this.cambiarColorLetra(false);
     }
 
+    // Marcar la letra como respondida
     this.letrasRespondidas.add(this.letraActual);
     this.actualizarRosco();
 
+    // Verificar si el juego ha terminado
     if (this.letrasRespondidas.size === this.letras.length) {
       this.mostrarModalPuntuacion();
     }
