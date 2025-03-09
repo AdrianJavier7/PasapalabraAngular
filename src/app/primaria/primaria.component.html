@@ -3,12 +3,31 @@
     <ion-title>Rosco Pasapalabra</ion-title>
   </ion-toolbar>
 </ion-header>
+
 <ion-content>
   <div class="rosco-container" #rosco>
+    <div #empieza style="color: black"></div>
     <div class="question-container" #question>Presiona una letra para ver la pregunta</div>
     <div class="answer-buttons">
-      <ion-button class="boton1" expand="full" (click)="checkAnswer('A')"></ion-button>
-      <ion-button class="boton2" expand="full" (click)="checkAnswer('B')"></ion-button>
+      <ion-button class="boton1" expand="full" (click)="checkAnswer(currentOptions[0])">{{ currentOptions[0] }}</ion-button>
+      <ion-button class="boton2" expand="full" (click)="checkAnswer(currentOptions[1])">{{ currentOptions[1] }}</ion-button>
     </div>
   </div>
+
+  <!-- Modal de puntuación -->
+  <ion-modal [isOpen]="isModalOpen" (didDismiss)="closeModal()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Puntuación Final</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <div class="modal-content">
+          <h2 style="color: black">Puntuación: {{ correctAnswers }} de {{ letras.length }}</h2>
+          <ion-button (click)="closeModal()">Cerrar</ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>
