@@ -1,0 +1,14 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Rosco Pasapalabra</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="rosco-container" #rosco>
+    <div class="question-container" #question>Presiona una letra para ver la pregunta</div>
+    <div class="answer-buttons">
+      <ion-button class="boton1" expand="full" (click)="checkAnswer('A')">Respuesta A</ion-button>
+      <ion-button expand="full" (click)="checkAnswer('B')">Respuesta B</ion-button>
+    </div>
+  </div>
+</ion-content>
