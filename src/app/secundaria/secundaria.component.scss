@@ -8,6 +8,13 @@ ion-content {
   text-align: center;
 }
 
+.modal-content {
+  text-align: center;
+  margin: 20px;
+  font-size: 1.5rem;
+}
+
+
 .rosco-container {
   position: relative;
   width: 350px;
@@ -40,6 +47,7 @@ ion-content {
 .question-container {
   margin-top: 20px;
   font-size: 1.2rem;
+  color: black;
 }
 
 ion-input {

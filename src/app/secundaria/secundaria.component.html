@@ -3,65 +3,33 @@
     <ion-title>Rosco Pasapalabra</ion-title>
   </ion-toolbar>
 </ion-header>
+
 <ion-content>
   <div class="rosco-container" #rosco>
+    <div #empieza style="color: black">
+
+    </div>
     <div class="question-container" #question>Presiona una letra para ver la pregunta</div>
-    <ion-input #answer placeholder="Escribe tu respuesta"></ion-input>
-    <ion-button expand="full" onclick="checkAnswer()">Responder</ion-button>
+    <form [formGroup]="formularioRespuesta">
+      <ion-input formControlName="respuesta" placeholder="Escribe tu respuesta" style="color: black"></ion-input>
+    </form>
+    <ion-button expand="full" (click)="verificarRespuesta()">Responder</ion-button>
   </div>
+
+  <ion-modal [isOpen]="modalAbierto" (didDismiss)="cerrarModal()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Puntuación Final</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <div class="modal-content">
+          <h2 style="color: black">Puntuación: {{ respuestasCorrectas }} de {{ letras.length }}</h2>
+          <ion-button (click)="cerrarModal()">Cerrar</ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
 </ion-content>
-
-<!-- <script>
-  const letters = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split("");
-  const questions = letters.reduce((acc, letter) => {
-    acc[letter] = `Con la ${letter}: Pregunta ejemplo.`;
-    return acc;
-  }, {});
-
-  const answers = letters.reduce((acc, letter) => {
-    acc[letter] = `Respuesta ${letter}`;
-    return acc;
-  }, {});
-
-  const roscoContainer = document.getElementById("rosco");
-  const questionContainer = document.getElementById("question");
-  let currentLetter = "";
-
-  function generateRosco() {
-    const radius = 140;
-    const centerX = 175;
-    const centerY = 175;
-    const angleStep = (2 * Math.PI) / letters.length;
-
-    letters.forEach((letter, index) => {
-      const angle = index * angleStep - Math.PI / 2;
-      const x = centerX + radius * Math.cos(angle);
-      const y = centerY + radius * Math.sin(angle);
-
-      const letterElement = document.createElement("div");
-      letterElement.classList.add("letter");
-      letterElement.textContent = letter;
-      letterElement.style.left = `${x}px`;
-      letterElement.style.top = `${y}px`;
-      letterElement.onclick = () => showQuestion(letter);
-
-      roscoContainer.appendChild(letterElement);
-    });
-  }
-
-  function showQuestion(letter) {
-    currentLetter = letter;
-    questionContainer.textContent = questions[letter] || "Pregunta no disponible.";
-  }
-
-  function checkAnswer() {
-    const answerInput = document.getElementById("answer").value.trim();
-    if (answers[currentLetter] && answerInput.toLowerCase() === answers[currentLetter].toLowerCase()) {
-      alert("¡Correcto!");
-    } else {
-      alert("Incorrecto, la respuesta era: " + (answers[currentLetter] || "Desconocida"));
-    }
-  }
-
-  generateRosco();
-</script>-->
