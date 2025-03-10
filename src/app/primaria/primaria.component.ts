@@ -182,15 +182,20 @@ export class PrimariaComponent implements OnInit {
     // Quitar el color amarillo de la letra previamente seleccionada
     const elementosLetras = this.roscoContainer.nativeElement.children;
     Array.from(elementosLetras).forEach((elemento: any) => {
-      if (elemento.style.backgroundColor === "yellow") {
-        elemento.style.backgroundColor = "#007aff"; // Restaurar color original
+      if (elemento.style.backgroundColor === "white") {
+        elemento.style.backgroundColor = "#007aff";
+        elemento.style.color = "white";
+        elemento.style.border = "none";
       }
     });
 
     // Marcar la nueva letra seleccionada en amarillo
     Array.from(elementosLetras).forEach((elemento: any) => {
       if (elemento.textContent === letra) {
-        elemento.style.backgroundColor = "yellow";
+        elemento.style.backgroundColor = "white";
+        elemento.style.border = "2px solid #007aff";
+        elemento.style.borderColor = "#007aff";
+        elemento.style.color = "#007aff";
       }
     });
 
