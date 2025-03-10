@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import {Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef} from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { ToastController } from '@ionic/angular';
 import {NgIf} from "@angular/common";
@@ -29,7 +29,7 @@ export class PrimariaComponent implements OnInit {
   tiempoRestante: number = 300; // 5 minutes in seconds
   intervalId: any;
 
-  constructor(private toastController: ToastController) {
+  constructor(private toastController: ToastController, private cdr: ChangeDetectorRef) {
     this.preguntas = {
       "A": "Lo que se consideraban San Ignacio y sus compañeros al servir a Cristo.",
       "B": "Punto de partida para su viaje de estudios y maduración espiritual.",
@@ -170,6 +170,8 @@ export class PrimariaComponent implements OnInit {
 
   closeModal() {
     this.isModalOpen = false;
+    this.mostrarBotones = false;
+    this.cdr.detectChanges();
   }
 
   generarRosco() {
@@ -278,18 +280,18 @@ export class PrimariaComponent implements OnInit {
 
     // Verificar si el juego ha terminado
     if (this.letrasRespondidas.size === this.letras.length) {
+      this.mostrarBotones = false;
+      this.cdr.detectChanges();
       // Mostrar el modal de puntuación
       this.mostrarModalPuntuacion();
-      this.mostrarBotones = false;
       this.questionContainer.nativeElement.textContent = "¡Juego terminado!";
     } else {
       // Mostrar la siguiente pregunta
       this.siguienteLetra();
       // Mostrar los botones después de una respuesta
-      this.mostrarBotones = false;
     }
 
-
+    this.mostrarBotones = true;
 
   }
 

@@ -28,7 +28,7 @@ export class SecundariaComponent implements OnInit {
   modalAbierto: boolean = false;
   respuestasCorrectas: number = 0;
   mostrarInputBoton: boolean = false;
-  tiempoRestante: number = 10; // 5 minutos en segundos
+  tiempoRestante: number = 300; // 5 minutos en segundos
   intervalId: any;
 
 
