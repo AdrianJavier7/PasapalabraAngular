@@ -10,10 +10,10 @@
   <div class="rosco-container" #rosco>
     <div #empieza style="color: black"></div>
     <div class="question-container" #question>Presiona una letra para ver la pregunta</div>
-    <form [formGroup]="formularioRespuesta">
+    <form [formGroup]="formularioRespuesta" *ngIf="mostrarInputBoton">
       <ion-input formControlName="respuesta" placeholder="Escribe tu respuesta" style="color: black"></ion-input>
     </form>
-    <ion-button expand="full" (click)="verificarRespuesta()">Responder</ion-button>
+    <ion-button expand="full" *ngIf="mostrarInputBoton" (click)="verificarRespuesta()">Responder</ion-button>
   </div>
 
   <ion-modal [isOpen]="modalAbierto" (didDismiss)="cerrarModal()">

@@ -251,6 +251,8 @@ export class PrimariaComponent implements OnInit {
     Array.from(elementosLetras).forEach((elemento: any) => {
       if (elemento.textContent === this.letraActual) {
         elemento.style.backgroundColor = esCorrecto ? "green" : "red";
+        elemento.style.color = "white";
+        elemento.style.border = "none";
       }
     });
   }

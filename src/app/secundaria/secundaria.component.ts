@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { ToastController } from '@ionic/angular';
+import {NgIf} from "@angular/common";
 
 
 @Component({
@@ -9,7 +10,7 @@ import { ToastController } from '@ionic/angular';
   templateUrl: './secundaria.component.html',
   styleUrls: ['./secundaria.component.scss'],
   standalone: true,
-  imports: [IonicModule, ReactiveFormsModule]
+  imports: [IonicModule, ReactiveFormsModule, NgIf]
 })
 export class SecundariaComponent implements OnInit {
   @ViewChild('rosco', { static: true }) roscoContainer!: ElementRef;
@@ -24,6 +25,7 @@ export class SecundariaComponent implements OnInit {
   formularioRespuesta: FormGroup;
   modalAbierto: boolean = false;
   respuestasCorrectas: number = 0;
+  mostrarInputBoton: boolean = false;
 
 
   constructor(private toastController: ToastController) {
@@ -174,6 +176,8 @@ export class SecundariaComponent implements OnInit {
       }
     });
 
+    this.mostrarInputBoton = true;
+
     // Guardar la letra seleccionada
     this.letraActual = letra;
     this.questionContainer.nativeElement.textContent = this.preguntas[letra] || "Pregunta no disponible.";
@@ -198,12 +202,18 @@ export class SecundariaComponent implements OnInit {
 
 
   async verificarRespuesta() {
+
     const respuestaUsuario = this.formularioRespuesta.get('respuesta')?.value || "";
     const respuestaCorrecta = this.respuestas[this.letraActual] || "";
 
     // Función para normalizar y eliminar tildes
     const normalizar = (texto: string) =>
       texto.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
+
+    if(respuestaUsuario === "") {
+      await this.mostrarToast("Por favor, ingresa una respuesta", 'danger');
+      return;
+    }
 
     if (normalizar(respuestaUsuario) === normalizar(respuestaCorrecta)) {
       // Si la respuesta es correcta
@@ -226,6 +236,7 @@ export class SecundariaComponent implements OnInit {
 
     // Limpiar el formulario
     this.formularioRespuesta.reset();
+    this.mostrarInputBoton = false;
 
     // Verificar si el juego ha terminado
     if (this.letrasRespondidas.size === this.letras.length) {
@@ -239,6 +250,8 @@ export class SecundariaComponent implements OnInit {
     Array.from(elementosLetras).forEach((elemento: any) => {
       if (elemento.textContent === this.letraActual) {
         elemento.style.backgroundColor = esCorrecto ? "green" : "red";
+        elemento.style.color = "white";
+        elemento.style.border = "none";
       }
     });
   }
