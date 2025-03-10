@@ -285,10 +285,12 @@ export class PrimariaComponent implements OnInit {
     } else {
       // Mostrar la siguiente pregunta
       this.siguienteLetra();
+      // Mostrar los botones después de una respuesta
+      this.mostrarBotones = true;
     }
 
-    // Mostrar los botones después de una respuesta
-    this.mostrarBotones = true;
+
+
   }
 
 
