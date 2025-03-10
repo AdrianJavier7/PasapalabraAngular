@@ -17,6 +17,7 @@ export class SecundariaComponent implements OnInit {
   @ViewChild('question', { static: true }) questionContainer!: ElementRef;
   @ViewChild('empieza', { static: true }) empieza!: ElementRef;
   @ViewChild('temporizador', { static: true }) temporizador!: ElementRef;
+  @ViewChild('respuestaInput', { static: false }) respuestaInput!: ElementRef;
 
   letras: string[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
   preguntas: { [key: string]: string } = {};
@@ -33,7 +34,7 @@ export class SecundariaComponent implements OnInit {
 
   constructor(private toastController: ToastController) {
     this.formularioRespuesta = new FormGroup({
-      respuesta: new FormControl('')  // Creamos un control de formulario para la respuesta
+      respuesta: new FormControl('')
     });
 
     this.preguntas = {
@@ -98,6 +99,7 @@ export class SecundariaComponent implements OnInit {
 
   ngOnInit() {
     this.generarRosco();
+    this.mostrarPregunta(this.letras[0]);
     this.iniciarTemporizador();
   }
 
@@ -121,7 +123,7 @@ export class SecundariaComponent implements OnInit {
   marcarNoRespondidasComoIncorrectas() {
     this.letras.forEach(letra => {
       if (!this.letrasRespondidas.has(letra)) {
-        this.cambiarColorLetra(false, letra);
+        this.cambiarColorLetra(false);
       }
     });
   }
@@ -134,6 +136,7 @@ export class SecundariaComponent implements OnInit {
 
   mostrarModalPuntuacion() {
     this.modalAbierto = true;
+    this.modalAbierto = true;
     const puntuacion = this.respuestasCorrectas;
     const total = this.letras.length;
     this.toastController.create({
@@ -145,7 +148,7 @@ export class SecundariaComponent implements OnInit {
   }
 
   cerrarModal() {
-    this.modalAbierto = false;  // Cerrar el modal
+    this.modalAbierto = false;
   }
 
   generarRosco() {
@@ -162,7 +165,6 @@ export class SecundariaComponent implements OnInit {
       const elementoLetra = document.createElement("div");
       elementoLetra.textContent = letra;
 
-      // Aplicar los estilos directamente
       Object.assign(elementoLetra.style, {
         position: "absolute",
         width: "42px",
@@ -181,35 +183,30 @@ export class SecundariaComponent implements OnInit {
         transform: "translate(-50%, -50%)",
       });
 
-      // Deshabilitar clic en letras ya respondidas
       if (this.letrasRespondidas.has(letra)) {
         elementoLetra.style.pointerEvents = 'none';
       }
 
-      // Agregar evento de clic
       elementoLetra.onclick = () => {
         if (!this.letrasRespondidas.has(letra)) {
           this.mostrarPregunta(letra);
         }
       };
 
-      // Agregar la letra al rosco
       this.roscoContainer.nativeElement.appendChild(elementoLetra);
     });
   }
 
   mostrarPregunta(letra: string) {
-    // Quitar el color amarillo de la letra previamente seleccionada
     const elementosLetras = this.roscoContainer.nativeElement.children;
     Array.from(elementosLetras).forEach((elemento: any) => {
       if (elemento.style.backgroundColor === "white") {
         elemento.style.backgroundColor = "#007aff";
         elemento.style.color = "white";
-        elemento.style.border = "none"; // Restaurar color original
+        elemento.style.border = "none";
       }
     });
 
-    // Marcar la nueva letra seleccionada en amarillo
     Array.from(elementosLetras).forEach((elemento: any) => {
       if (elemento.textContent === letra) {
         elemento.style.backgroundColor = "white";
@@ -220,8 +217,6 @@ export class SecundariaComponent implements OnInit {
     });
 
     this.mostrarInputBoton = true;
-
-    // Guardar la letra seleccionada
     this.letraActual = letra;
     this.questionContainer.nativeElement.textContent = this.preguntas[letra] || "Pregunta no disponible.";
 
@@ -241,35 +236,33 @@ export class SecundariaComponent implements OnInit {
     } else {
       empiezaContainer.textContent = `La respuesta no contiene la letra ${letra}`;
     }
+
+    setTimeout(() => {
+      this.respuestaInput.nativeElement.focus();
+    }, 0);
   }
 
-
   async verificarRespuesta() {
-
     const respuestaUsuario = this.formularioRespuesta.get('respuesta')?.value || "";
     const respuestaCorrecta = this.respuestas[this.letraActual] || "";
 
-    // Función para normalizar y eliminar tildes
     const normalizar = (texto: string) =>
       texto.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
 
-    if(respuestaUsuario === "") {
+    if (respuestaUsuario === "") {
       await this.mostrarToast("Por favor, ingresa una respuesta", 'danger');
       return;
     }
 
     if (normalizar(respuestaUsuario) === normalizar(respuestaCorrecta)) {
-      // Si la respuesta es correcta
       this.respuestasCorrectas++;
       await this.mostrarToast("¡Correcto!", 'success');
       this.cambiarColorLetra(true);
     } else {
-      // Si la respuesta es incorrecta
       await this.mostrarToast("Incorrecto, la respuesta era: " + respuestaCorrecta, 'danger');
       this.cambiarColorLetra(false);
     }
 
-    // Marcar la letra como respondida y deshabilitarla para futuras respuestas
     this.letrasRespondidas.add(this.letraActual);
     this.actualizarRosco();
 
@@ -284,14 +277,16 @@ export class SecundariaComponent implements OnInit {
     // Verificar si el juego ha terminado
     if (this.letrasRespondidas.size === this.letras.length) {
       this.mostrarModalPuntuacion();
+      this.questionContainer.nativeElement.textContent = "¡Juego terminado!";
+    } else {
+      this.siguienteLetra();
     }
   }
 
-
-  cambiarColorLetra(esCorrecto: boolean, letra: string = this.letraActual) {
+  cambiarColorLetra(esCorrecto: boolean) {
     const elementosLetras = this.roscoContainer.nativeElement.children;
     Array.from(elementosLetras).forEach((elemento: any) => {
-      if (elemento.textContent === letra) {
+      if (elemento.textContent === this.letraActual) {
         elemento.style.backgroundColor = esCorrecto ? "green" : "red";
         elemento.style.color = "white";
         elemento.style.border = "none";
@@ -302,9 +297,9 @@ export class SecundariaComponent implements OnInit {
   async mostrarToast(mensaje: string, color: string) {
     const toast = await this.toastController.create({
       message: mensaje,
-      duration: 2000,  // Duración en milisegundos
-      color: color,    // El color del toast (puede ser 'success', 'danger', etc.)
-      position: 'bottom',  // Ubicación en la pantalla
+      duration: 2000,
+      color: color,
+      position: 'bottom',
     });
     toast.present();
   }
@@ -313,8 +308,15 @@ export class SecundariaComponent implements OnInit {
     const elementosLetras = this.roscoContainer.nativeElement.children;
     Array.from(elementosLetras).forEach((elemento: any) => {
       if (this.letrasRespondidas.has(elemento.textContent)) {
-        elemento.style.pointerEvents = 'none'; // Deshabilitar la letra si ya se respondió
+        elemento.style.pointerEvents = 'none';
       }
     });
+  }
+
+  siguienteLetra() {
+    const letrasRestantes = this.letras.filter(letra => !this.letrasRespondidas.has(letra));
+    if (letrasRestantes.length > 0) {
+      this.mostrarPregunta(letrasRestantes[0]);
+    }
   }
 }

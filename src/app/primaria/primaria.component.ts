@@ -122,6 +122,7 @@ export class PrimariaComponent implements OnInit {
   ngOnInit() {
     this.generarRosco();
     this.iniciarTemporizador();
+    this.mostrarPregunta(this.letras[0]);
   }
 
   ngOnDestroy() {
@@ -275,17 +276,19 @@ export class PrimariaComponent implements OnInit {
     this.letrasRespondidas.add(this.letraActual);
     this.actualizarRosco();
 
-    // Mostrar el mensaje "Presiona una letra para ver la pregunta"
-    this.questionContainer.nativeElement.textContent = "Presiona una letra para ver la pregunta";
-
     // Verificar si el juego ha terminado
     if (this.letrasRespondidas.size === this.letras.length) {
       // Mostrar el modal de puntuación
       this.mostrarModalPuntuacion();
+      this.mostrarBotones = false;
+      this.questionContainer.nativeElement.textContent = "¡Juego terminado!";
+    } else {
+      // Mostrar la siguiente pregunta
+      this.siguienteLetra();
     }
 
-    // Ocultar los botones después de una respuesta
-    this.mostrarBotones = false;
+    // Mostrar los botones después de una respuesta
+    this.mostrarBotones = true;
   }
 
 
@@ -317,5 +320,12 @@ export class PrimariaComponent implements OnInit {
         elemento.style.pointerEvents = 'none';
       }
     });
+  }
+
+  siguienteLetra() {
+    const letrasRestantes = this.letras.filter(letra => !this.letrasRespondidas.has(letra));
+    if (letrasRestantes.length > 0) {
+      this.mostrarPregunta(letrasRestantes[0]);
+    }
   }
 }
