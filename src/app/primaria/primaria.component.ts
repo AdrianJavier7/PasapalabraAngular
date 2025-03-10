@@ -14,6 +14,7 @@ export class PrimariaComponent implements OnInit {
   @ViewChild('rosco', { static: true }) roscoContainer!: ElementRef;
   @ViewChild('question', { static: true }) questionContainer!: ElementRef;
   @ViewChild('empieza', { static: true }) empieza!: ElementRef;
+  @ViewChild('temporizador', { static: true }) temporizador!: ElementRef;
 
   letras: string[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
   preguntas: { [key: string]: string } = {};
@@ -25,6 +26,8 @@ export class PrimariaComponent implements OnInit {
   isModalOpen: boolean = false;
   currentOptions: string[] = [];  // Definir currentOptions aquí
   mostrarBotones: boolean = false;
+  tiempoRestante: number = 300; // 5 minutes in seconds
+  intervalId: any;
 
   constructor(private toastController: ToastController) {
     this.preguntas = {
@@ -118,10 +121,50 @@ export class PrimariaComponent implements OnInit {
 
   ngOnInit() {
     this.generarRosco();
+    this.iniciarTemporizador();
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.intervalId);
+  }
+
+  iniciarTemporizador() {
+    this.intervalId = setInterval(() => {
+      if (this.tiempoRestante > 0) {
+        this.tiempoRestante--;
+        this.actualizarTemporizador();
+      } else {
+        clearInterval(this.intervalId);
+        this.marcarNoRespondidasComoIncorrectas();
+        this.mostrarModalPuntuacion();
+      }
+    }, 1000);
   }
 
   mostrarModalPuntuacion() {
     this.isModalOpen = true;
+    const puntuacion = this.correctAnswers;
+    const total = this.letras.length;
+    this.toastController.create({
+      message: `Puntuación final: ${puntuacion} de ${total}`,
+      duration: 5000,
+      color: 'primary',
+      position: 'bottom',
+    }).then(toast => toast.present());
+  }
+
+  actualizarTemporizador() {
+    const minutos = Math.floor(this.tiempoRestante / 60);
+    const segundos = this.tiempoRestante % 60;
+    this.temporizador.nativeElement.textContent = `${minutos}:${segundos < 10 ? '0' : ''}${segundos}`;
+  }
+
+  marcarNoRespondidasComoIncorrectas() {
+    this.letras.forEach(letra => {
+      if (!this.letrasRespondidas.has(letra)) {
+        this.cambiarColorLetra(false, letra);
+      }
+    });
   }
 
   closeModal() {
@@ -246,10 +289,10 @@ export class PrimariaComponent implements OnInit {
   }
 
 
-  cambiarColorLetra(esCorrecto: boolean) {
+  cambiarColorLetra(esCorrecto: boolean, letra: string = this.letraActual) {
     const elementosLetras = this.roscoContainer.nativeElement.children;
     Array.from(elementosLetras).forEach((elemento: any) => {
-      if (elemento.textContent === this.letraActual) {
+      if (elemento.textContent === letra) {
         elemento.style.backgroundColor = esCorrecto ? "green" : "red";
         elemento.style.color = "white";
         elemento.style.border = "none";
