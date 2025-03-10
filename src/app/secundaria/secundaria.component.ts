@@ -28,7 +28,7 @@ export class SecundariaComponent implements OnInit {
   modalAbierto: boolean = false;
   respuestasCorrectas: number = 0;
   mostrarInputBoton: boolean = false;
-  tiempoRestante: number = 300; // 5 minutos en segundos
+  tiempoRestante: number = 10; // 5 minutos en segundos
   intervalId: any;
 
 
@@ -123,7 +123,7 @@ export class SecundariaComponent implements OnInit {
   marcarNoRespondidasComoIncorrectas() {
     this.letras.forEach(letra => {
       if (!this.letrasRespondidas.has(letra)) {
-        this.cambiarColorLetra(false);
+        this.cambiarColorLetra(false, letra);
       }
     });
   }
@@ -135,7 +135,6 @@ export class SecundariaComponent implements OnInit {
   }
 
   mostrarModalPuntuacion() {
-    this.modalAbierto = true;
     this.modalAbierto = true;
     const puntuacion = this.respuestasCorrectas;
     const total = this.letras.length;
@@ -283,10 +282,10 @@ export class SecundariaComponent implements OnInit {
     }
   }
 
-  cambiarColorLetra(esCorrecto: boolean) {
+  cambiarColorLetra(esCorrecto: boolean, letra: string = this.letraActual) {
     const elementosLetras = this.roscoContainer.nativeElement.children;
     Array.from(elementosLetras).forEach((elemento: any) => {
-      if (elemento.textContent === this.letraActual) {
+      if (elemento.textContent === letra) {
         elemento.style.backgroundColor = esCorrecto ? "green" : "red";
         elemento.style.color = "white";
         elemento.style.border = "none";
