@@ -179,13 +179,30 @@ export class PrimariaComponent implements OnInit {
   }
 
   mostrarPregunta(letra: string) {
+    // Quitar el color amarillo de la letra previamente seleccionada
+    const elementosLetras = this.roscoContainer.nativeElement.children;
+    Array.from(elementosLetras).forEach((elemento: any) => {
+      if (elemento.style.backgroundColor === "yellow") {
+        elemento.style.backgroundColor = "#007aff"; // Restaurar color original
+      }
+    });
+
+    // Marcar la nueva letra seleccionada en amarillo
+    Array.from(elementosLetras).forEach((elemento: any) => {
+      if (elemento.textContent === letra) {
+        elemento.style.backgroundColor = "yellow";
+      }
+    });
+
+    // Guardar la letra seleccionada
     this.letraActual = letra;
     this.questionContainer.nativeElement.textContent = this.preguntas[letra] || "Pregunta no disponible.";
 
     // Generar opciones de respuesta
     const correctAnswer = this.respuestas[letra];
-    const incorrectAnswer = this.respuestasIncorrectas[letra];
-    this.currentOptions = this.shuffleArray([correctAnswer, incorrectAnswer]);  // Mezclamos las opciones
+    const incorrectAnswer = this.respuestasIncorrectas?.[letra] || "Opción incorrecta"; // Evita errores si no existe
+
+    this.currentOptions = this.shuffleArray([correctAnswer, incorrectAnswer]); // Mezclar opciones
 
     this.mostrarBotones = true;
   }

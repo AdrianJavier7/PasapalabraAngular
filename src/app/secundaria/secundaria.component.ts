@@ -154,13 +154,26 @@ export class SecundariaComponent implements OnInit {
   }
 
   mostrarPregunta(letra: string) {
+    // Quitar el color amarillo de la letra previamente seleccionada
+    const elementosLetras = this.roscoContainer.nativeElement.children;
+    Array.from(elementosLetras).forEach((elemento: any) => {
+      if (elemento.style.backgroundColor === "yellow") {
+        elemento.style.backgroundColor = "#007aff"; // Restaurar color original
+      }
+    });
+
+    // Marcar la nueva letra seleccionada en amarillo
+    Array.from(elementosLetras).forEach((elemento: any) => {
+      if (elemento.textContent === letra) {
+        elemento.style.backgroundColor = "yellow";
+      }
+    });
+
+    // Guardar la letra seleccionada
     this.letraActual = letra;
     this.questionContainer.nativeElement.textContent = this.preguntas[letra] || "Pregunta no disponible.";
 
-    // Obtenemos la respuesta correcta para la letra seleccionada
     const textoRespuesta = this.respuestas[letra].toLowerCase();
-
-    // Verificamos si la respuesta contiene o empieza con la letra seleccionada
     const contieneLetra = textoRespuesta.includes(letra.toLowerCase());
     const empiezaConLetra = textoRespuesta.startsWith(letra.toLowerCase());
 
@@ -178,18 +191,23 @@ export class SecundariaComponent implements OnInit {
     }
   }
 
-  async verificarRespuesta() {
-    const respuesta = this.formularioRespuesta.get('respuesta')?.value; // Obtener el valor del input
-    const respuestaCorrecta = this.respuestas[this.letraActual];
 
-    if (respuestaCorrecta && respuesta.toLowerCase() === respuestaCorrecta.toLowerCase()) {
+  async verificarRespuesta() {
+    const respuestaUsuario = this.formularioRespuesta.get('respuesta')?.value || "";
+    const respuestaCorrecta = this.respuestas[this.letraActual] || "";
+
+    // Función para normalizar y eliminar tildes
+    const normalizar = (texto: string) =>
+      texto.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
+
+    if (normalizar(respuestaUsuario) === normalizar(respuestaCorrecta)) {
       // Si la respuesta es correcta
-      this.respuestasCorrectas++;  // Incrementar contador de respuestas correctas
+      this.respuestasCorrectas++;
       await this.mostrarToast("¡Correcto!", 'success');
       this.cambiarColorLetra(true);
     } else {
       // Si la respuesta es incorrecta
-      await this.mostrarToast("Incorrecto, la respuesta era: " + (respuestaCorrecta || "Desconocida"), 'danger');
+      await this.mostrarToast("Incorrecto, la respuesta era: " + respuestaCorrecta, 'danger');
       this.cambiarColorLetra(false);
     }
 
@@ -197,7 +215,7 @@ export class SecundariaComponent implements OnInit {
     this.letrasRespondidas.add(this.letraActual);
     this.actualizarRosco();
 
-    // Mostrar el mensaje "Presiona una letra para ver la pregunta"
+    // Restaurar mensaje de pregunta
     this.empieza.nativeElement.textContent = "";
     this.questionContainer.nativeElement.textContent = "Presiona una letra para ver la pregunta";
 
@@ -209,6 +227,7 @@ export class SecundariaComponent implements OnInit {
       this.mostrarModalPuntuacion();
     }
   }
+
 
   cambiarColorLetra(esCorrecto: boolean) {
     const elementosLetras = this.roscoContainer.nativeElement.children;
