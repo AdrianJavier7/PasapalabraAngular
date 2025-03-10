@@ -286,7 +286,7 @@ export class PrimariaComponent implements OnInit {
       // Mostrar la siguiente pregunta
       this.siguienteLetra();
       // Mostrar los botones después de una respuesta
-      this.mostrarBotones = true;
+      this.mostrarBotones = false;
     }
 
 
