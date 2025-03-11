@@ -327,9 +327,20 @@ export class PrimariaComponent implements OnInit {
   }
 
   siguienteLetra() {
-    const letrasRestantes = this.letras.filter(letra => !this.letrasRespondidas.has(letra));
-    if (letrasRestantes.length > 0) {
-      this.mostrarPregunta(letrasRestantes[0]);
+    // Obtener el índice de la letra actual
+    const indexActual = this.letras.indexOf(this.letraActual);
+    const totalLetras = this.letras.length;
+
+    // Buscar la siguiente letra no respondida en sentido horario
+    for (let i = 1; i < totalLetras; i++) {
+      const siguienteIndex = (indexActual + i) % totalLetras; // Círculo en el rosco
+      const siguienteLetra = this.letras[siguienteIndex];
+
+      if (!this.letrasRespondidas.has(siguienteLetra)) {
+        this.mostrarPregunta(siguienteLetra);
+        return;
+      }
     }
   }
+
 }
